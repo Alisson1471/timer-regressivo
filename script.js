@@ -7,12 +7,16 @@ const minutosReduzidos = document.getElementById("minutos-t");
 const segundosReduzidos = document.getElementById("segundos-t");
 
 const date = new Date();
+let initiated = false;
+
 date.setHours(0)
 date.setMinutes(0)
 date.setSeconds(0)
 
 function executarTimer() {
   event.preventDefault();
+
+  initiated = true;
 
   const h = parseInt(horasAdicionadas.value) || 0;
   const m = parseInt(minutosAdicionados.value) || 0;
@@ -38,7 +42,7 @@ function executarTimer() {
   date.setHours(horas, minutos, segundos);
 }
 
-function diminuirTimer(event) {
+function diminuirTimer() {
   event.preventDefault();
 
   const h = parseInt(horasReduzidas.value) || 0;
@@ -64,6 +68,11 @@ setInterval(() => {
         date.getMinutes() > 0 ||
         date.getSeconds() > 0) {
       date.setSeconds(date.getSeconds() - 1);
+    } else {
+      if (initiated) {
+        alert('Timer encerrado!');
+        initiated = false;
+      }
     }
 
     const horasTimer = date.getHours().toString().padStart(2, "0");
