@@ -9,37 +9,41 @@ const segundosReduzidos = document.getElementById("segundos-t");
 const date = new Date();
 let initiated = false;
 
-date.setHours(0)
-date.setMinutes(0)
-date.setSeconds(0)
+date.setHours(0);
+date.setMinutes(0);
+date.setSeconds(0);
 
 function executarTimer() {
   event.preventDefault();
-
-  initiated = true;
 
   const h = parseInt(horasAdicionadas.value) || 0;
   const m = parseInt(minutosAdicionados.value) || 0;
   const s = parseInt(segundosAdicionados.value) || 0;
 
-  const adicionar = h * 3600 + m * 60 + s;
+  if ((h == 24 && m > 0) || (h == 24 && s > 0) || h > 24) {
+    alert("O limite de tempo é de 24 horas! (1 dia)");
+  } else if (h < 0 || m < 0 || s < 1) {
+    alert("O tempo inserido não pode ser menor que 1s!");
+  } else {
+    const adicionar = h * 3600 + m * 60 + (s + 1);
 
-  let atual =
-    date.getHours() * 3600 +
-    date.getMinutes() * 60 +
-    date.getSeconds();
+    let atual =
+      date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
 
-  let novo = atual + adicionar;
+    let novo = atual + adicionar;
 
-  if (novo > 86400) {
-    novo = 86399;
+    if (novo > 86400) {
+      novo = 86399;
+    }
+
+    initiated = true;
+
+    const horas = Math.floor(novo / 3600);
+    const minutos = Math.floor((novo % 3600) / 60);
+    const segundos = novo % 60;
+
+    date.setHours(horas, minutos, segundos);
   }
-
-  const horas = Math.floor(novo / 3600);
-  const minutos = Math.floor((novo % 3600) / 60);
-  const segundos = novo % 60;
-
-  date.setHours(horas, minutos, segundos);
 }
 
 function diminuirTimer() {
@@ -52,9 +56,7 @@ function diminuirTimer() {
   const reduzir = h * 3600 + m * 60 + s;
 
   const atual =
-    date.getHours() * 3600 +
-    date.getMinutes() * 60 +
-    date.getSeconds();
+    date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
 
   if (reduzir <= atual) {
     date.setSeconds(date.getSeconds() - reduzir);
@@ -64,21 +66,19 @@ function diminuirTimer() {
 }
 
 setInterval(() => {
-    if (date.getHours() > 0 ||
-        date.getMinutes() > 0 ||
-        date.getSeconds() > 0) {
-      date.setSeconds(date.getSeconds() - 1);
-    } else {
-      if (initiated) {
-        alert('Timer encerrado!');
-        initiated = false;
-      }
+  if (date.getHours() > 0 || date.getMinutes() > 0 || date.getSeconds() > 0) {
+    date.setSeconds(date.getSeconds() - 1);
+  } else {
+    if (initiated) {
+      alert("Timer encerrado!");
+      initiated = false;
     }
+  }
 
-    const horasTimer = date.getHours().toString().padStart(2, "0");
-    const minutosTimer = date.getMinutes().toString().padStart(2, "0");
-    const segundosTimer = date.getSeconds().toString().padStart(2, "0");
-    const atual = `${horasTimer}:${minutosTimer}:${segundosTimer}`;
+  const horasTimer = date.getHours().toString().padStart(2, "0");
+  const minutosTimer = date.getMinutes().toString().padStart(2, "0");
+  const segundosTimer = date.getSeconds().toString().padStart(2, "0");
+  const atual = `${horasTimer}:${minutosTimer}:${segundosTimer}`;
 
-    tempo.textContent = atual;
-  }, 1000);
+  tempo.textContent = atual;
+}, 1000);
