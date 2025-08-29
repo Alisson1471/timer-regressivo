@@ -8,11 +8,18 @@
 </head>
 <body>
     <form>
-        <input type="number" id="minutos">
-        <input type="number" id="segundos">
-        <button onclick="executarTimer()">Definir timer</button>
+        <input type="number" id="horas-a">
+        <input type="number" id="minutos-a">
+        <input type="number" id="segundos-a">
+        <button onclick="executarTimer()">Adicionar tempo ao timer</button>
     </form>
-    <h1 id="tempo">00:00</h1>
+    <h1 id="tempo">00:00:00</h1>
+    <form>
+        <input type="number" id="horas-t">
+        <input type="number" id="minutos-t">
+        <input type="number" id="segundos-t">
+        <button onclick="diminuirTimer()">Reduzir tempo do timer</button>
+    </form>
     <script src="script.js"></script>
 </body>
 </html>
