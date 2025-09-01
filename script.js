@@ -23,6 +23,18 @@ function atualizarDisplay() {
   tempo.textContent = `${h}:${m}:${s}`;
 }
 
+function falar(texto) {
+  const msg = new SpeechSynthesisUtterance(texto);
+
+  // Configurações opcionais
+  msg.lang = "pt-BR";   // idioma
+  msg.rate = 1.2;         // velocidade (0.1 até 10)
+  msg.pitch = 1;        // tom de voz (0 até 2)
+  msg.volume = 1;       // volume (0 até 1)
+
+  speechSynthesis.speak(msg);
+}
+
 function executarTimer() {
   event.preventDefault();
 
@@ -31,9 +43,11 @@ function executarTimer() {
   const s = parseInt(segundosAdicionados.value) || 0;
 
   if ((h == 24 && m > 0) || (h == 24 && s > 0) || h > 24) {
+    falar("O limite de tempo é de 24 horas!")
     alert("O limite de tempo é de 24 horas! (1 dia)");
     return;
-  } else if (h < 0 || m < 0 || s < 1) {
+  } else if (h < 0 && m < 0 && s < 1) {
+    falar("O tempo inserido não pode ser menor que 1s!")
     alert("O tempo inserido não pode ser menor que 1s!");
     return;
   }
@@ -54,6 +68,7 @@ function executarTimer() {
 
   // Salva no localStorage
   localStorage.setItem("timer", date.getTime());
+  falar("Tempo adicionado ao timer com sucesso!")
 
   atualizarDisplay();
 }
@@ -81,6 +96,7 @@ function diminuirTimer() {
   date.setHours(horas, minutos, segundos);
 
   localStorage.setItem("timer", date.getTime());
+  falar("Tempo do timer reduzido com sucesso!")
 
   atualizarDisplay();
 
@@ -106,6 +122,7 @@ setInterval(() => {
 
       localStorage.setItem("timer", date.getTime());
 
+      falar("Timer encerrado!")
       alert("Timer encerrado!");
       initiated = false;
     }
